@@ -1,0 +1,138 @@
+<style>
+.box-form-button{
+	position : relative ;
+	width : 80% ;
+	margin-left : auto ;
+	margin-right : auto ;
+}
+	.box-form-button table{
+		position : relative ;
+		width : 100% ;
+	}
+		.box-form-button .text-a{
+			padding-left: 30px;
+			font-size: 20px;
+			font-weight: bolder;
+			color: white;
+		}
+		
+.form-deskripsi{
+	width: 70%;
+	height: 60px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 20px;
+	font-weight: bolder;
+	color: white;
+	margin-left : auto ;
+	margin-right : auto ;
+}
+	.row-textarea{
+		width : 100% ;
+	}
+		.row-textarea textarea{
+			width : 100% ;
+		}
+</style>
+
+<script>
+urlhome_inputpage = pg_menu_ptg ;
+</script>
+
+<div class="contentcontainer">
+	<div class="r1_row r1_header">
+	</div>
+	<div class="r1_row r1_content">
+		<div class="r1_row  r2_boxtitle">
+			<h2>INPUT LAPORAN</h2>
+		</div>
+		<div class="r1_row  r2_boxcontent">
+			<center>
+				<input type="TEXT" class="form-control" id="barang" placeholder="Nama Barang">
+			</center>
+			<center>
+				<input type="TEXT" class="form-control" id="tanggal" placeholder="Tanggal">
+			</center>
+			<center>
+				<input type="TEXT" class="form-control" id="jam" placeholder="Jam">
+			</center>
+			<center>
+				<input type="TEXT" class="form-control" id="lokasi" placeholder="Lokasi">
+			</center>
+			<div class="form-deskripsi">
+
+				<div class="row-textarea">
+						<textarea id="deskripsi" placeholder="deskripsi">
+						</textarea>
+				</div>
+			</div>
+			<center>
+				<button type="button" class="btn btn-warning"
+					onclick="createBarangFromPetugas()"
+				>
+					SUBMIT
+				</button>
+			</center>
+		</div>
+	</div>
+	<div class="r1_row r1_footer">	
+	</div>
+</div>
+
+<script>
+
+function createBarangFromPetugas(){
+	try{
+		//=========================> get parameter .
+		var nama = $("#barang").val();
+		var tgl = $("#tanggal").val();
+		var pukul = $("#jam").val();
+		var lokasi = $("#lokasi").val();
+		var deskripsi = $("#deskripsi").val();
+		if(nama.length > 3 && tgl.length > 3   && pukul.length > 3   && lokasi.length > 3  ){
+			//=========================> cek apakah informasi ada di database .
+			var strurl = "/addnewbarang?nama=" + nama + "&tgl=" + tgl + "&pukul=" + pukul + "&lokasi=" + lokasi + "&deskripsi=" + deskripsi  ;
+			console.log(strurl);
+			$.ajax({
+				method: 'GET',
+				crossDomain: true,
+				url: strurl ,
+				dataType: "html",
+				success : function( event){
+					try{
+						if( event.indexOf("FINISH") > -1 ){
+							alert("Success Insert Data");
+							$("#barang").val("");
+							$("#tanggal").val("");
+							$("#jam").val("");
+							$("#lokasi").val("");
+							$("#deskripsi").val("");
+						}else{
+							alert("error when insert data : " + event);
+						}
+						
+					}catch(e){
+						alert("error : " + e );
+					}
+				},
+				error : function( r , h , s ){
+							alert(" error JQAJAX  " + s );				
+				}
+			}); 
+		}else{
+			alert("Tolong Isi data terlebih dahulu");
+		}
+	}catch(e){
+		console.log("Err pada createBarangFromPetugas : " + e );
+	}
+}
+
+
+$(document).ready(function(){
+	try{
+		callpage(div_header,part_html_title);
+	}catch(e){
+		alert("error when call action 'call' , error in : " + e);
+	}
+});
+</script>

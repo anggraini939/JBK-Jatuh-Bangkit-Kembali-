@@ -1,0 +1,162 @@
+<script>
+urlhome_inputpage = pg_dashboard_umu ;
+</script>
+
+<div class="contentcontainer">
+	<div class="r1_row r1_header">
+	</div>
+	<div class="r1_row r1_content">
+		<div class="r1_row  r2_boxtitle">
+			<h2>LIHAT LAPORAN</h2>
+		</div>
+		<div class="r1_row  r2_boxcontent">
+			<div class="box-table-view">
+				<div class="table-data-view">
+					
+
+				</div>
+				<div class="table-data-navigator">
+					<table style="width:100%">
+						<tr><td>
+							<button type="button" class="btn btn-warning" style="width:100%"
+									onclick="previous()"
+								>
+									Prev
+							</button>
+						</td>
+						<td>
+							<button type="button" class="btn btn-warning" style="width:100%"
+									onclick="next()"
+								>
+									Next
+							</button>
+						</td></tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="r1_row r1_footer">	
+	</div>
+</div>
+
+<script>
+var counterpagination = 0 ;
+var ncoloumb = 5 ;
+var datadbs = '' ;
+
+function getRowDat( idbarang ){
+	try{
+		setCookie("idbarang", idbarang, 30);
+		console.log("ID BARANG :" + getCookie("idbarang"));
+		callpage(div_pagecontent,pg_formviewdataeachitem);
+	}catch(e){
+		console.log("error pada : " + getRowDat);
+	}
+}
+
+
+function rendertable(event , index ){
+		try{
+			//================>
+			//=> idxawal = ( index * n ) 
+			//=> idxakhr = ( n ) + idxawal  ;
+			var idxawal = ( index * ncoloumb );
+			var idxakhr = ( idxawal + ncoloumb );
+			//================>
+			var tbl = '<table class="tg" style="undefined;table-layout: relative; width: 100%">' ;
+			tbl += '<colgroup>' ;
+			tbl += '	<col style="width: 44px">';
+			tbl += '	<col style="width: 113px">';
+			tbl += '	<col style="width: 97px">';
+			tbl += '	<col style="width: 90px">';
+			tbl += '</colgroup>';	
+			tbl += '  	<tr>';
+			tbl += '		<th class="tg-ghey">No</th>';
+			tbl += '		<th class="tg-bq31">Nama Barang</th>';
+			tbl += '		<th class="tg-bq31">TGL</th>';
+			tbl += '		<th class="tg-bq31">Ket</th>';
+			tbl += '  </tr>';
+			//================>
+			console.log("awal:"+idxawal+"Akhir:"+idxakhr);
+			console.log("Jumlah:" + event.length + "::" + JSON.stringify(event));
+			for( var i = idxawal ; i < idxakhr ; i++ ){
+				if( i < event.length ){
+					//==============================>
+					var strtgl = event[i]['tgl'];
+					var restgl = strtgl.split('T');
+					console.log("split:" + restgl[0]);
+					//==============================>
+					var idstat = event[i]['idstatus'];
+					var numbstat = parseInt(idstat);
+					var stat = statsimpan ;
+					if( numbstat == 2 ){
+						stat = statambil ;
+					}
+					var rows = 	'<tr onclick="getRowDat('+event[i]['id']+')">';
+					rows += '	<th class="tg-ghey">'+(i+1)+'</th>' ;
+					rows += '	<th class="tg-bq31">'+event[i]['nama']+'</th>' ;
+					rows += '	<th class="tg-bq31">'+restgl[0]+'</th>' ;
+					rows += '	<th class="tg-bq31">'+stat+'</th>' ;
+					rows += '</tr>' ;
+					console.log(rows);
+					tbl += rows ;
+				}
+			}
+			//=================>
+			tbl += '</table>' ;
+			//==================>
+			$(".table-data-view").empty();
+			$(".table-data-view").append(tbl);
+	}catch(e){
+		console.log("Error pada rendertable : " + e );
+	}
+}
+
+function getDataBarang(){
+	try{
+		var strurl = "/getbarang";
+		console.log(strurl);
+		$.ajax({
+			method: 'GET',
+			crossDomain: true,
+			url: strurl ,
+			dataType: "json",
+			success : function( event){
+				counterpagination = 0 ;
+				datadbs = event ;
+				rendertable(event,0);
+			},
+			error : function( r , h , s ){
+						alert(" error JQAJAX  " + s );				
+			}
+		}); 
+	}catch(e){
+		console.log("Err pada getDataBarang : " + e );
+	}
+}
+
+function previous(){
+if( counterpagination > -1 ){
+	counterpagination-- ;
+	rendertable(datadbs,counterpagination);
+}	
+}
+
+function next(){
+counterpagination++ ;
+rendertable(datadbs,counterpagination);
+}
+
+
+$(document).ready(function(){
+	try{
+		setCookie("datapage", "2", 30);
+		console.log("cookies:" + getCookie("datapage"));
+		getDataBarang();
+		callpage(div_header,part_html_title);
+	}catch(e){
+		alert("error when call action 'call' , error in : " + e);
+	}
+});
+</script>

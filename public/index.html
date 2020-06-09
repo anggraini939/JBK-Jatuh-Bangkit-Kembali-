@@ -1,0 +1,65 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,height=device-height, initial-scale=1.0" />
+		<link rel="manifest" href="/manifest.json">
+		<link rel="shortcut icon" href="/favicon.ico">
+		<link rel="apple-touch-icon" href="/favicon.ico">
+		<link rel="stylesheet" href="assets/css/bootstrap.css"></link>
+		<link rel="stylesheet" href="assets/css/app.css"></link>
+		<link rel="stylesheet" href="assets/css/formcss.css"></link>
+		
+		<script src="assets/js/jquery-3.4.1.js"></script>	
+		<script src="assets/js/bootstrap.js"></script> 
+		<script src="assets/js/call.js"></script>			
+		
+		<script>
+		var statsimpan = "Masih Di SImpan" ;
+		var statambil = "Telah Di DiAmbil" ;
+		
+		function setCookie(cname,cvalue,exdays) {
+		  var d = new Date();
+		  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+		  var expires = "expires=" + d.toGMTString();
+		  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+		}
+
+		function getCookie(cname) {
+		  var name = cname + "=";
+		  var decodedCookie = decodeURIComponent(document.cookie);
+		  var ca = decodedCookie.split(';');
+		  for(var i = 0; i < ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0) == ' ') {
+			  c = c.substring(1);
+			}
+			if (c.indexOf(name) == 0) {
+			  return c.substring(name.length, c.length);
+			}
+		  }
+		  return "";
+		}
+		</script>
+
+
+		<script>
+			var homeurl = "localhost:2000" ;
+			$(document).ready(function(){
+				try{
+					callpage(div_pagecontent,pg_welcome);
+				}catch(e){
+					alert("error when call action 'call' , error in : " + e);
+				}
+			});
+		</script>
+		
+	</head>
+	<body style="background-color: #003366">
+		<div class="container-app">
+			
+		</div>
+		<script type="text/javascript" src="assets/js/sw-controller.js"></script>
+		<script type="text/javascript" src="assets/js/index.js"></script>
+	</body>
+	
+</html>
+

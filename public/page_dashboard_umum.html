@@ -1,0 +1,41 @@
+<style>
+
+</style>
+
+<div class="contentcontainer">
+	<div class="r1_row r1_header">
+	</div>
+	<div class="r1_row r1_content">
+		<div class="r1_row  r2_boxtitle">
+			<h2>masuk sebagai?</h2>
+		</div>
+		<div class="r1_row  r2_boxcontent">
+			<center>
+				<button type="button" class="btn btn-warning"
+					onclick="callpage(div_pagecontent,pg_formlogin_ptg)"
+				>
+					PETUGAS
+				</button>
+			</center>
+			<center>
+				<button type="button" class="btn btn-warning"
+					onclick="callpage(div_pagecontent,pg_formview_mhs)"
+				>
+					MAHASISWA
+				</button>
+			</center>
+		</div>
+	</div>
+	<div class="r1_row r1_footer">	
+	</div>
+</div>
+
+<script>
+$(document).ready(function(){
+	try{
+		callpage(div_header,part_html_title);
+	}catch(e){
+		alert("error when call action 'call' , error in : " + e);
+	}
+});
+</script>

@@ -1,0 +1,139 @@
+<style>
+.box-form-button{
+	position : relative ;
+	width : 80% ;
+	margin-left : auto ;
+	margin-right : auto ;
+}
+	.box-form-button table{
+		position : relative ;
+		width : 100% ;
+	}
+		.box-form-button .text-a{
+			padding-left: 30px;
+			font-size: 20px;
+			font-weight: bolder;
+			color: white;
+		}
+		
+.form-deskripsi{
+	width: 70%;
+	height:60px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 20px;
+	font-weight: bolder;
+	color: white;
+	margin-left : auto ;
+	margin-right : auto ;
+}
+	.row-textarea{
+		width : 100% ;
+	}
+		.row-textarea textarea{
+			width : 100% ;
+			font-size : 18px ;
+		}
+</style>
+
+<script>
+urlhome_inputpage = pg_formview_ptg ;
+</script>
+
+<div class="contentcontainer">
+	<div class="r1_row r1_header">
+	</div>
+	<div class="r1_row r1_content">
+		<div class="r1_row  r2_boxtitle">
+			<h2>INFORMASI BARANG</h2>
+		</div>
+		<div class="r1_row  r2_boxcontent">
+			<center>
+				<input type="TEXT" class="form-control" id="barang" placeholder="Nama Barang" disabled>
+			</center>
+			<center>
+				<input type="TEXT" class="form-control" id="tanggal" placeholder="Tanggal" disabled>
+			</center>
+			<center>
+				<input type="TEXT" class="form-control" id="lokasi" placeholder="Lokasi" disabled>
+			</center>
+			<center>
+				<input type="TEXT" class="form-control" id="status" placeholder="STATUS" disabled>
+			</center>
+			<div class="form-deskripsi">
+				<div class="row-textarea">
+						<textarea id="deskripsi" disabled>
+						</textarea>
+				</div>
+			</div>
+		
+		</div>
+	</div>
+	<div class="r1_row r1_footer">	
+	</div>
+</div>
+
+
+<script>
+var objectdbs = '' ;
+
+
+function getDataBarang(id){
+	try{
+		var strurl = "/getbaranguseid?id="+id;
+		console.log(strurl);
+		$.ajax({
+			method: 'GET',
+			crossDomain: true,
+			url: strurl ,
+			dataType: "json",
+			success : function( event){
+				objectdbs = event ;
+				if( event.length > 0 ){
+					//==============================> TGL
+					var strtgl = event[0]['tgl'];
+					var restgl = strtgl.split('T');
+					console.log("split:" + restgl[0]);
+					//==============================> STAT
+					var idstat = event[0]['idstatus'];
+					var numbstat = parseInt(idstat);
+					var stat = statsimpan ;
+					if( numbstat == 2 ){
+						stat = statambil ;
+						$("#buttonset").text("Set Belum DiAmbil")
+					}else{
+						$("#buttonset").text("Set DiAmbil")
+					}
+					//==============================> TGL
+					var nama = event[0]['nama'];
+					var tgl = event[0]['tgl'];
+					var pukul = event[0]['pukul'];
+					var lokasi = event[0]['lokasi'];
+					var deskripsi = event[0]['deskripsi'];
+					//====================================>\
+					$("#barang").val(nama);
+					$("#tanggal").val(restgl[0] + "/" + pukul);
+					$("#lokasi").val(lokasi);
+					$("#deskripsi").val(deskripsi);
+					$("#status").val(stat);
+				}
+			},
+			error : function( r , h , s ){
+						alert(" error JQAJAX  " + s );				
+			}
+		}); 
+	}catch(e){
+		console.log("Err pada getDataBarang : " + e );
+	}
+}
+
+$(document).ready(function(){
+	try{
+		console.log("ID BARANG :" + getCookie("idbarang"));
+		getDataBarang(getCookie("idbarang"));
+		callpage(div_header,part_html_title);
+	}catch(e){
+		alert("error when call action 'call' , error in : " + e);
+	}
+});
+</script>

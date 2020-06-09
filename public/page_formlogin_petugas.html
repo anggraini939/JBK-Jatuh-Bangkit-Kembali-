@@ -1,0 +1,105 @@
+<style>
+.box-form-button{
+	position : relative ;
+	width : 80% ;
+	margin-left : auto ;
+	margin-right : auto ;
+}
+	.box-form-button table{
+		position : relative ;
+		width : 100% ;
+	}
+		.box-form-button .text-a{
+			padding-left: 30px;
+			font-size: 20px;
+			font-weight: bolder;
+			color: white;
+		}
+</style>
+
+<div class="contentcontainer">
+	<div class="r1_row r1_header">
+	</div>
+	<div class="r1_row r1_content">
+		<div class="r1_row  r2_boxtitle">
+			<h2>LOG-IN PETUGAS</h2>
+		</div>
+		<div class="r1_row  r2_boxcontent">
+			<center>
+				<input type="text" class="form-control" id="user" placeholder="USER">
+			</center>
+			<center>
+				<input type="password" class="form-control" id="password" placeholder="PASSWORD">
+			</center>
+			<div class="box-form-button">
+				<table>
+					<tr>
+						<td>
+							<label
+								class="text-a"
+								onclick="callpage(div_pagecontent,pg_formcreate_ptg)"
+							>
+								BUAT
+							</label>
+						</td>
+						<td>
+							<center>
+								<button type="button" class="btn btn-warning"
+										onclick="loginForChekPetugasData()"
+								>
+									Log In	
+								</button>
+							</center>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="r1_row r1_footer">	
+	</div>
+</div>
+
+<script>
+function loginForChekPetugasData(){
+	try{
+		//=========================> get parameter .
+		var user = $("#user").val();
+		var password = $("#password").val();
+		//=========================> cek apakah informasi ada di database .
+		var strurl = "/cekpetugas?usr=" + user + "&pwd=" + password  ;
+		$.ajax({
+			method: 'GET',
+			crossDomain: true,
+			url: strurl ,
+			dataType: "json",
+			success : function( event){
+				try{
+					var jumlah = parseInt(event[0]['count(id)']);
+					if( jumlah == 0 ){
+						alert("User Or Password Not Found ");
+					}else{
+						callpage(div_pagecontent,pg_menu_ptg);
+					}
+					
+				}catch(e){
+					alert("error : " + e );
+				}
+			},
+			error : function( r , h , s ){
+						alert(" error JQAJAX  " + s );				
+			}
+		}); 
+	}catch(e){
+		console.log("Err pada loginForChekPetugasData : " + e );
+	}
+}
+
+$(document).ready(function(){
+	try{
+		callpage(div_header,part_html_title);
+	}catch(e){
+		alert("error when call action 'call' , error in : " + e);
+	}
+});
+</script>

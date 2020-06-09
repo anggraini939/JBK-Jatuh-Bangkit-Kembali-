@@ -1,0 +1,122 @@
+<style>
+.box-form-button{
+	position : relative ;
+	width : 80% ;
+	margin-left : auto ;
+	margin-right : auto ;
+}
+	.box-form-button table{
+		position : relative ;
+		width : 100% ;
+	}
+		.box-form-button .text-a{
+			padding-left: 30px;
+			font-size: 20px;
+			font-weight: bolder;
+			color: white;
+		}
+		
+.form-deskripsi{
+	width: 70%;
+	height: 90px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	font-size: 20px;
+	font-weight: bolder;
+	color: white;
+	margin-left : auto ;
+	margin-right : auto ;
+}
+	.row-textarea{
+		width : 100% ;
+	}
+		.row-textarea textarea{
+			width : 100% ;
+		}
+</style>
+
+<script>
+urlhome_inputpage = pg_dashboard_umu ;
+</script>
+
+<div class="contentcontainer">
+	<div class="r1_row r1_header">
+	</div>
+	<div class="r1_row r1_content">
+		<div class="r1_row  r2_boxtitle">
+			<h2>Buat Akun Petugas</h2>
+		</div>
+		<div class="r1_row  r2_boxcontent">
+			<center>
+				<input type="TEXT" class="form-control" id="barang" placeholder="Nama Petugas">
+			</center>
+			<center>
+				<input type="TEXT" class="form-control" id="nomor" placeholder="Nomor Petugas">
+			</center>
+			<center>
+				<input type="TEXT" class="form-control" id="user" placeholder="User Name">
+			</center>
+			<center>
+				<input type="TEXT" class="form-control" id="password" placeholder="Password">
+			</center>
+		
+			<center>
+				<button type="button" class="btn btn-warning"
+					onclick="createUserForPetugas()"
+				>
+					SUBMIT
+				</button>
+			</center>
+		</div>
+	</div>
+	<div class="r1_row r1_footer">	
+	</div>
+</div>
+
+<script>
+
+function createUserForPetugas(){
+	try{
+		//=========================> get parameter .
+		var barang = $("#barang").val();
+		var nomor = $("#nomor").val();
+		var user = $("#user").val();
+		var password = $("#password").val();
+		//=========================> cek apakah informasi ada di database .
+		var strurl = "/addnewbarang?barang=" + barang + "&nomor=" + nomor + "&usr=" + user + "&pwd=" + password  ;
+		console.log(strurl);
+		$.ajax({
+			method: 'GET',
+			crossDomain: true,
+			url: strurl ,
+			dataType: "html",
+			success : function( event){
+				try{
+					if( event.indexOf("FINISH") > -1 ){
+						callpage(div_pagecontent,pg_formlogin_ptg);
+					}else{
+						alert("error when insert data : " + event);
+					}
+					
+				}catch(e){
+					alert("error : " + e );
+				}
+			},
+			error : function( r , h , s ){
+						alert(" error JQAJAX  " + s );				
+			}
+		}); 
+	}catch(e){
+		console.log("Err pada createUserForPetugas : " + e );
+	}
+}
+
+
+$(document).ready(function(){
+	try{
+		callpage(div_header,part_html_title);
+	}catch(e){
+		alert("error when call action 'call' , error in : " + e);
+	}
+});
+</script>
